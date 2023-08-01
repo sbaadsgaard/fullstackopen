@@ -3,16 +3,16 @@ const Header = ({ course }) => <h1>{course}</h1>
 const Total = ({ sum }) => <p>Number of exercises {sum}</p>
 
 const Part = ({ part }) =>
-  <li>
+  <p>
     {part.name} {part.exercises}
-  </li>
+  </p>
 
 const Content = ({ parts }) =>
-  <ul>
+  <>
     {parts.map(part =>
-      <Part key={part.id} part={part} />
+      <div key={part.id} ><Part part={part} /></div>
     )}
-  </ul>
+  </>
 
 const Course = ({ course }) =>
   <div>
