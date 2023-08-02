@@ -12,6 +12,7 @@ const NewPersonForm = ({ callback }) => {
       const newPersonObj = {
         name: newName
       }
+      setNewName("")
       callback(newPersonObj)
     }
   
