@@ -8,8 +8,18 @@ const App = () => {
     { name: 'Arto Hellas' }
   ])
 
+
   const addPerson = (personObj) => {
-    setPersons(persons.concat(personObj))
+    const isValidPersonObject = (obj) => Object.hasOwn(obj, "name") //probably not the most bulletproof plan 
+    if (!isValidPersonObject(personObj)) {
+      console.log("not a valid person object")
+      return
+    }
+    if (persons.some(p => p.name === personObj.name)) {
+      alert(`${personObj.name} is already added to phonebook`)
+    } else {
+      setPersons(persons.concat(personObj))
+    }
   }
 
   return (
