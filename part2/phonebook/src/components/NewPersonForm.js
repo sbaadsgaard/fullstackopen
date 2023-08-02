@@ -6,24 +6,35 @@ import { useState } from 'react'
 //solution found by following https://react.dev/reference/react-dom/components/input#optimizing-re-rendering-on-every-keystroke
 const NewPersonForm = ({ callback }) => {
     const [newName, setNewName] = useState('')
-    const handleNameChange = e => setNewName(e.target.value)
+    const [newNumber, setNewNumber] = useState('')
     const handleAddClicked = e => {
-      e.preventDefault()
-      const newPersonObj = {
-        name: newName
-      }
-      setNewName("")
-      callback(newPersonObj)
+        e.preventDefault()
+
+        if (newNumber === '' || newName === '') {
+            alert("Please enter both a name and a number")
+            return
+        }
+
+        const newPersonObj = {
+            name: newName,
+            number: newNumber
+        }
+        setNewName("")
+        setNewNumber("")
+        callback(newPersonObj)
     }
-  
+
     return <form>
-      <div>
-        name: <input value={newName} onChange={handleNameChange} />
-      </div>
-      <div>
-        <button type="submit" onClick={handleAddClicked}>add</button>
-      </div>
+        <div>
+            name: <input value={newName} onChange={e => setNewName(e.target.value)} />
+        </div>
+        <div>
+            number: <input value={newNumber} onChange={e => setNewNumber(e.target.value)}/>
+        </div>
+        <div>
+            <button type="submit" onClick={handleAddClicked}>add</button>
+        </div>
     </form>
 }
-  
+
 export default NewPersonForm

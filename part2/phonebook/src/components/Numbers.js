@@ -1,13 +1,10 @@
-const Person = ({ name, number = '-1' }) => {
-    return <p>{name}</p>
-}
+import Person from "./Person"
 
 const Numbers = ({ persons }) => {
-  console.log("rerender")
-  return <div>
-    {persons.map(p =>
-      <Person key={p.name} name={p.name} />)}
-  </div>
+    return <div>
+        {persons.map(p =>
+            <Person key={p.name} person={p} />)}
+    </div>
 }
 
 export default Numbers
