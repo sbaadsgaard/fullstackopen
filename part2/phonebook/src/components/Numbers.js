@@ -3,7 +3,7 @@ import Person from "./Person"
 const Numbers = ({ persons, handleRemoveClicked}) => {
     return <div>
         {persons.map(p =>
-            <Person key={p.name} person={p} handleRemoveClicked={handleRemoveClicked}/>)}
+            <Person key={p.id} person={p} handleRemoveClicked={handleRemoveClicked}/>)}
     </div>
 }
 

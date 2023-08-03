@@ -10,7 +10,8 @@ const create = (personObject) =>
 }
 
 const remove = (id) => {
-    return axios.delete(`${baseURL}/${id}`)
+    const request = axios.delete(`${baseURL}/${id}`) 
+    return request.then(res => {})
 }
 
 const update = (id, personObject) => {

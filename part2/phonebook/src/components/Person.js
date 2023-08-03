@@ -1,7 +1,7 @@
 const Person = ({ person, handleRemoveClicked }) => {
     const removeClicked = () => {
         if (window.confirm(`Remove ${person.name}?`)) {
-            handleRemoveClicked(person.id)
+            handleRemoveClicked(person.id, person.name)
         }
     }
     return <div>
