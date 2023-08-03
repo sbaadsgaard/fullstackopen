@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import phonebookServices from './services/phonebookServices'
 import Numbers from './components/Numbers'
 import NewPersonForm from './components/NewPersonForm'
 import SearchFilter from './components/SearchFilter'
@@ -9,11 +9,9 @@ const App = () => {
   const [searchString, setSearchString] = useState("")
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons ')
-      .then(res => {
-        setPersons(res.data)
-      })
+    phonebookServices
+      .getAll()
+      .then(initPersons => setPersons(initPersons))
   }, [])
 
   const addPerson = (personObj) => {
@@ -26,7 +24,16 @@ const App = () => {
       alert(`${personObj.name} is already added to phonebook`)
       return
     }
-    setPersons(persons.concat(personObj))
+    phonebookServices
+      .create(personObj)
+      .then(newPerson => setPersons(persons.concat(newPerson)))
+  }
+
+  const removePerson = id => {
+    phonebookServices.remove(id)
+      .then(res => {
+        setPersons(persons.filter(p => p.id !== id))
+      })
   }
 
   const filterPersons = () => persons.filter(p => p.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -38,7 +45,7 @@ const App = () => {
       <h2>Add new</h2>
       <NewPersonForm callback={addPerson} />
       <h2>Numbers</h2>
-      <Numbers persons={filterPersons()} />
+      <Numbers persons={filterPersons()} handleRemoveClicked={removePerson} />
     </div>
   )
 }
