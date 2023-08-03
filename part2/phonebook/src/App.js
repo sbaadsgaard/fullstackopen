@@ -14,19 +14,26 @@ const App = () => {
       .then(initPersons => setPersons(initPersons))
   }, [])
 
-  const addPerson = (personObj) => {
+  const addPerson = (personObject) => {
     const isValidPersonObject = (obj) => Object.hasOwn(obj, "name") //probably not the most bulletproof plan 
-    if (!isValidPersonObject(personObj)) {
+    if (!isValidPersonObject(personObject)) {
       console.log("not a valid person object")
       return
     }
-    if (persons.some(p => p.name === personObj.name)) {
-      alert(`${personObj.name} is already added to phonebook`)
-      return
+    if (persons.some(p => p.name === personObject.name)) {     
+      if (window.confirm(`${personObject.name} is already added to phonebook. Replace the old number with a new one?`)) {
+      
+        const id = persons.find(p => p.name === personObject.name).id
+        phonebookServices
+          .update(id, personObject)
+          .then(updatedperson =>
+            setPersons(persons.map(p => p.id !== updatedperson.id ? p : updatedperson)))
+      }
+    } else {
+      phonebookServices
+        .create(personObject)
+        .then(newPerson => setPersons(persons.concat(newPerson)))
     }
-    phonebookServices
-      .create(personObj)
-      .then(newPerson => setPersons(persons.concat(newPerson)))
   }
 
   const removePerson = id => {
