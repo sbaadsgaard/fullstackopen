@@ -25,6 +25,11 @@ const App = () => {
     setSearchString(e.target.value)
 
   }
+
+  const showChosenCountry = country => {
+    setSearchMatches([country])
+  }
+
   return (
     <>
       <h1>Data for countries</h1>
@@ -32,7 +37,7 @@ const App = () => {
         searchString={searchString}
         handleSearchChanged={handleSearchChanged}
       />
-      <Results matches={searchMatches} />
+      <Results matches={searchMatches} handleShow={showChosenCountry}/>
     </>
   )
 }

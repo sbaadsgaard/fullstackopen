@@ -1,14 +1,22 @@
-const Suggestion = ({ name }) => <p>{name}</p>
+const Suggestion = ({ country, handleShow }) => {
+    const handleClicked = e => {
+        e.preventDefault()
+        handleShow(country)
+    }
+    return <div>
+        {country.name.common} <button onClick={handleClicked}>Show</button>
+    </div>
+}
 
 const Match = ({ country }) => {
-    const flagStyle = {border: '1px solid black'}
+    const flagStyle = { border: '1px solid black' }
     return <>
         <h1>{country.name.common}</h1>
         <p>Capital: {country.capital}</p>
         <p>Population: {country.population}</p>
         <h2>Languages</h2>
         <ul>
-            {Object.values(country.languages).map(lang => 
+            {Object.values(country.languages).map(lang =>
                 <li key={lang}>{lang}</li>)}
         </ul>
         <img
@@ -19,7 +27,7 @@ const Match = ({ country }) => {
     </>
 }
 
-const Results = ({ matches }) => {
+const Results = ({ matches, handleShow }) => {
     if (matches === null) {
         return <p>Enter name of a country</p>
     }
@@ -34,7 +42,7 @@ const Results = ({ matches }) => {
 
     } else if (matches.length <= 10) {
         return <>
-            {matches.map(m => <Suggestion key={m.name.common} name={m.name.common} />)}
+            {matches.map(m => <Suggestion key={m.name.common} country={m} handleShow={handleShow} />)}
         </>
     } else {
         return <p>Too many matches. Please specify.</p>
