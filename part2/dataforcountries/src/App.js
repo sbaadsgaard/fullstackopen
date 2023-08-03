@@ -11,18 +11,18 @@ const App = () => {
 
   useEffect(() => {
     countryDataService
-      .getCountryNames()
+      .getCountryData()
       .then(result => setCountryData(result))
   }, [])
 
-  const handleSearchChanged = (e) => {
+  const filterCountries = (string) => {
     //if no search string is entered, clear matches
-    if (e.target.value === "") {
+    if (string === "") {
       setSearchMatches(null)
     } else {
-      setSearchMatches(countryData.filter(country => country.name.common.includes(e.target.value)))
+      setSearchMatches(countryData.filter(country => country.name.common.toLowerCase().includes(string.toLowerCase())))
     }
-    setSearchString(e.target.value)
+    setSearchString(string)
 
   }
 
@@ -35,7 +35,7 @@ const App = () => {
       <h1>Data for countries</h1>
       <SearchField
         searchString={searchString}
-        handleSearchChanged={handleSearchChanged}
+        handleSearchChanged={filterCountries}
       />
       <Results matches={searchMatches} handleShow={showChosenCountry}/>
     </>

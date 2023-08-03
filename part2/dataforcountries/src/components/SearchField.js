@@ -1,7 +1,10 @@
 const SearchField = ({searchString, handleSearchChanged}) => {
+    const searchChanged = e => {
+        handleSearchChanged(e.target.value)
+    }
     return <div>
         find countries <input
-            onChange={handleSearchChanged}
+            onChange={searchChanged}
             value={searchString}
         />
     </div>
