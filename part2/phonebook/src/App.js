@@ -44,8 +44,7 @@ const App = () => {
             setPersons(persons.map(p => p.id !== updatedperson.id ? p : updatedperson))
           })
           .catch(err => {
-            showNotification(`${personObject.name} is missing on the server`, "error")
-            setPersons(persons.filter(p => p.id !== id))
+            showNotification(err.response.data.error, "error")
           })
       }
     } else {
@@ -55,6 +54,7 @@ const App = () => {
           showNotification(`Added ${personObject.name}`, "info")
           setPersons(persons.concat(newPerson))
         })
+        .catch(error => showNotification(error.response.data.error, "error"))
     }
   }
 
@@ -62,10 +62,6 @@ const App = () => {
     phonebookServices.remove(id)
       .then(() => {
         showNotification(`Removed ${name}`, "info")
-        setPersons(persons.filter(p => p.id !== id))
-      })
-      .catch(err => {
-        showNotification(`${name} is already missing on the server`, "error")
         setPersons(persons.filter(p => p.id !== id))
       })
   }

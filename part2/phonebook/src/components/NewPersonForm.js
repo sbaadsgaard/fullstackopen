@@ -10,11 +10,6 @@ const NewPersonForm = ({ callback }) => {
     const handleAddClicked = e => {
         e.preventDefault()
 
-        if (newNumber === '' || newName === '') {
-            alert("Please enter both a name and a number")
-            return
-        }
-
         const newPersonObj = {
             name: newName,
             number: newNumber
