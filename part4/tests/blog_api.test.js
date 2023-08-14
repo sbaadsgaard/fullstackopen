@@ -56,6 +56,21 @@ test("creating a POST request to /api/blogs/ successfully creates new blogpost",
 
 })
 
+test("if likes is missing from request, it should default to 0", async () => {
+    const testBlogObject = {
+        title: "Musings about things 2.0",
+        author: "Mr. Anderson",
+        url: "www.fourohfour.com/twopointoh"
+    }
+
+    const result = await api
+        .post("/api/blogs")
+        .send(testBlogObject)
+        .expect(201)
+
+    expect(result.body.likes).toBe(0)
+})
+
 
 afterAll(async () => {
     mongoose.connection.close()
