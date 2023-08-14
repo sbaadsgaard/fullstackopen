@@ -71,6 +71,33 @@ test("if likes is missing from request, it should default to 0", async () => {
     expect(result.body.likes).toBe(0)
 })
 
+test("if url missing from request, backend should respond with status code 400 bad request", async () => {
+    const testBlogObject = {
+        title: "Musings about things 3.0",
+        author: "Mr. Anderson",
+        likes: 0
+    }
+
+    await api
+        .post("/api/blogs")
+        .send(testBlogObject)
+        .expect(400)
+})
+
+test("if title is missing from request, backend should respond with status code 400 bad request", async () => {
+    const testBlogObject = {
+        url: "www.fourohfour.com/threepointoh",
+        author: "Mr. Anderson",
+        likes: 0
+    }
+
+    await api
+        .post("/api/blogs")
+        .send(testBlogObject)
+        .expect(400)
+})
+
+
 
 afterAll(async () => {
     mongoose.connection.close()
