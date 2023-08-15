@@ -104,7 +104,49 @@ describe("creating a new blog in database", () => {
     })
 })
 
+describe("Deleting a blog from the database", () => {
+    test("A Delete request with an existing ID should result in status code 204 and the blog with that id should not be in the database", async () => {
+        const blogsBefore = await helper.blogsInDb()
+        const blogToDelete = blogsBefore[0]
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+        const blogsAfter = await helper.blogsInDb()
+        expect(blogsAfter).toHaveLength(blogsBefore.length - 1)
+        expect(blogsAfter).not.toContainEqual(blogToDelete)
+    })
 
+    test("A delete request with a non-existing ID should result in status code 204 but the database remains unchanged", async () => {
+        const blogsBefore = await helper.blogsInDb()
+        const nonExistingID = await helper.nonExistingID()
+        await api
+            .delete(`/api/blogs/${nonExistingID}`)
+            .expect(204)
+        const blogsAfter = await helper.blogsInDb()
+        expect(blogsAfter).toHaveLength(blogsBefore.length)
+        blogsBefore.forEach(blog => expect(blogsAfter).toContainEqual(blog))
+
+    })
+})
+
+describe("Updating a blog from database", () => {
+    test("You can update the number of likes of an existing blogpost", async () => {
+        const blogs = await helper.blogsInDb()
+        const previous = blogs[0]
+        const updated = {
+            ...previous,
+            likes: previous.likes + 1
+        }
+        delete updated.id
+        await api.
+            put(`/api/blogs/${previous.id}`)
+            .send(updated)
+            .expect(200)
+            .expect("Content-Type", /application\/json/)
+        const result = await api.get(`/api/blogs/${previous.id}`)
+        expect(result.body.likes).toBe(updated.likes)
+    })
+})
 
 
 
