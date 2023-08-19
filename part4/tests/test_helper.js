@@ -1,6 +1,6 @@
 const Blog = require("../models/blog")
 const User = require("../models/user")
-
+const bcrypt = require("bcrypt")
 const initialBlogs = [
     {
         title: "React patterns",
@@ -86,6 +86,20 @@ const nonExistingID = async () => {
     return result._id.toString()
 }
 
+const cleanAndInitUserDatabase = async () => {
+    await User.deleteMany({})
+    for (const user of initialUsers) {
+        const passwordHash = await bcrypt.hash(user.password, 10)
+        const newUser = new User({
+            name: user.name,
+            username: user.username,
+            passwordHash
+        })
+        await newUser.save()
+    }
+}
+
+
 module.exports = {
-    initialBlogs, initialUsers, blogsInDb, usersInDb, nonExistingID
+    initialBlogs, initialUsers, blogsInDb, usersInDb, nonExistingID, cleanAndInitUserDatabase
 }

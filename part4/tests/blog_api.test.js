@@ -6,10 +6,16 @@ const helper = require("./test_helper")
 const api = supertest(app)
 
 const Blog = require("../models/blog")
+const User = require("../models/user")
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+    await helper.cleanAndInitUserDatabase()
+    const defaultUser = User.findOne({})
+    const blogsWithUsers = helper.initialBlogs.map(blog => {
+        return { ...blog, user: defaultUser._id }
+    })
+    await Blog.insertMany(blogsWithUsers)
 })
 
 describe("Getting existing notes in database", () => {
