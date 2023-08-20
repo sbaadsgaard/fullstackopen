@@ -8,10 +8,20 @@ const api = supertest(app)
 const Blog = require("../models/blog")
 const User = require("../models/user")
 
+const getLoginToken = async () => {
+    const loginResponse = await api
+        .post("/api/login")
+        .send({ username: "root", password: "RootPassword" })
+    return loginResponse.body.token
+}
+
+let token = ""
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     await helper.cleanAndInitUserDatabase()
-    const defaultUser = User.findOne({})
+    token = await getLoginToken()
+    const defaultUser = await User.findOne({})
     const blogsWithUsers = helper.initialBlogs.map(blog => {
         return { ...blog, user: defaultUser._id }
     })
@@ -57,13 +67,13 @@ describe("creating a new blog in database", () => {
         const blogsBefore = await helper.blogsInDb()
         await api
             .post("/api/blogs")
+            .set("Authorization", `Bearer ${token}`)
             .send(testBlogObject)
             .expect(201)
 
         const blogsAfter = await helper.blogsInDb()
         expect(blogsAfter.length).toBe(blogsBefore.length + 1)
-
-        const blogsWithoutID = blogsAfter.map(b => _.omit(b, "id"))
+        const blogsWithoutID = blogsAfter.map(b => _.omit(b, "id", "user"))
         expect(blogsWithoutID).toContainEqual(testBlogObject)
 
     })
@@ -77,6 +87,7 @@ describe("creating a new blog in database", () => {
 
         const result = await api
             .post("/api/blogs")
+            .set("Authorization", `Bearer ${token}`)
             .send(testBlogObject)
             .expect(201)
 
@@ -92,6 +103,7 @@ describe("creating a new blog in database", () => {
 
         await api
             .post("/api/blogs")
+            .set("Authorization", `Bearer ${token}`)
             .send(testBlogObject)
             .expect(400)
     })
@@ -105,6 +117,7 @@ describe("creating a new blog in database", () => {
 
         await api
             .post("/api/blogs")
+            .set("Authorization", `Bearer ${token}`)
             .send(testBlogObject)
             .expect(400)
     })
