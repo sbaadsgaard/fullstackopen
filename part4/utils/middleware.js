@@ -22,5 +22,12 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
+const tokenExtractor = (request, response, next) => {
+    const auth = request.get("authorization")
+    request.token = (auth && auth.startsWith("Bearer "))
+        ? auth.replace("Bearer ", "")
+        : null
+    next()
+}
 
-module.exports = { requestLogger, errorHandler }
+module.exports = { requestLogger, errorHandler, tokenExtractor }
