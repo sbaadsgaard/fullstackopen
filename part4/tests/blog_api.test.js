@@ -21,7 +21,7 @@ beforeEach(async () => {
     await Blog.deleteMany({})
     await helper.cleanAndInitUserDatabase()
     token = await getLoginToken()
-    const defaultUser = await User.findOne({})
+    const defaultUser = await User.findOne({ username: "root" })
     const blogsWithUsers = helper.initialBlogs.map(blog => {
         return { ...blog, user: defaultUser._id }
     })
@@ -124,15 +124,32 @@ describe("creating a new blog in database", () => {
 })
 
 describe("Deleting a blog from the database", () => {
-    test("A Delete request with an existing ID should result in status code 204 and the blog with that id should not be in the database", async () => {
+    test("User can delete a blog they own, resulting in status 204 and blog no longer existing in db", async () => {
+        //all blogs are owned by root
         const blogsBefore = await helper.blogsInDb()
         const blogToDelete = blogsBefore[0]
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set("Authorization", `Bearer ${token}`)
             .expect(204)
         const blogsAfter = await helper.blogsInDb()
         expect(blogsAfter).toHaveLength(blogsBefore.length - 1)
         expect(blogsAfter).not.toContainEqual(blogToDelete)
+    })
+
+    test("User cannot delete a blog they dont own, resulting in status 403 and db remain unchanged", async () => {
+        const blogsBefore = await helper.blogsInDb()
+        const loginRes = await api // all blogs owned by root
+            .post("/api/login")
+            .send({ username: "MrChan", password: "Chan123" })
+        const res = await api
+            .delete(`/api/blogs/${blogsBefore[0].id}`)
+            .set("Authorization", `Bearer ${loginRes.body.token}`)
+            .expect(403)
+            .expect("Content-Type", /application\/json/)
+        expect(res.body.error).toContain("Not permitted to delete blogs from other users")
+        const blogsAfter = await helper.blogsInDb()
+        expect(blogsAfter).toEqual(blogsBefore)
     })
 
     test("A delete request with a non-existing ID should result in status code 204 but the database remains unchanged", async () => {
@@ -140,11 +157,11 @@ describe("Deleting a blog from the database", () => {
         const nonExistingID = await helper.nonExistingID()
         await api
             .delete(`/api/blogs/${nonExistingID}`)
+            .set("Authorization", `Bearer ${token}`)
             .expect(204)
         const blogsAfter = await helper.blogsInDb()
         expect(blogsAfter).toHaveLength(blogsBefore.length)
         blogsBefore.forEach(blog => expect(blogsAfter).toContainEqual(blog))
-
     })
 })
 
