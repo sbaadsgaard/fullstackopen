@@ -17,6 +17,7 @@ function App() {
   useEffect(() => {
     const getBlogs = async () => {
       const retrieved = await blogService.getAll()
+      retrieved.sort((first, second) => second.likes - first.likes) // sort by likes, descending. most likes top
       setBlogs(retrieved)
     }
     getBlogs()
@@ -60,6 +61,7 @@ function App() {
     }
     try {
       const newBlog = await blogService.create(blog)
+      newBlog.user = user
       setBlogs(blogs.concat(newBlog))
       showNotication(`Blog titled  \'${newBlog.title}\' by ${newBlog.author} has been created`, 'info')
     } catch (exception) {
@@ -79,12 +81,27 @@ function App() {
     }
   }
 
+  const handleRemove = async (removed) => {
+    try {
+      await blogService.remove(removed.id)
+      setBlogs(blogs.filter(blog => blog.id !== removed.id))
+      showNotication(`Removed ${removed.title} by ${removed.author}`, "info")
+    } catch (exception) {
+      showNotication(exception.response.data.error, 'error')
+    }
+  }
+
   const showBlogView = () =>
     <>
       <h1>Blogs</h1>
       <Notification config={notificationConfig} />
       <CurrentUser user={user} handleLogout={handleLogout} />
-      <BlogList blogs={blogs} handleUpdate={handleUpdate} />
+      <BlogList
+        blogs={blogs}
+        handleUpdate={handleUpdate}
+        handleRemove={handleRemove}
+        currentUsername={user.username}
+      />
       <Togglable btnLabel="Create new blog" ref={blogCreatorRef}>
         <h1>Create new</h1>
         <BlogCreator handleCreate={handleCreate} />
