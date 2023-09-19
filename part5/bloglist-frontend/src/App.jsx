@@ -60,6 +60,7 @@ function App() {
     }
     try {
       const newBlog = await blogService.create(blog)
+      newBlog.user = user   // manually set user who created. Object returned from backend has the user ID as value
       setBlogs(blogs.concat(newBlog))
       showNotication(`Blog titled  \'${newBlog.title}\' by ${newBlog.author} has been created`, 'info')
     } catch (exception) {
