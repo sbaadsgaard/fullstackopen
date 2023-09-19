@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import blogService from "./services/blogService"
 import loginService from "./services/loginService"
 import LoginForm from "./components/LoginForm"
@@ -6,11 +6,13 @@ import BlogList from "./components/BlogList"
 import CurrentUser from "./components/CurrentUser"
 import BlogCreator from "./components/BlogCreator"
 import Notification from "./components/Notification"
+import Togglable from "./components/Togglable"
 function App() {
 
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [notificationConfig, setNotificationConfig] = useState(null)
+  const blogCreatorRef = useRef(null)
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -48,6 +50,7 @@ function App() {
   }
 
   const handleCreate = async (blogData) => {
+    blogCreatorRef.current.toggleVisibility()
     const { title, author, url } = blogData
     const blog = {
       title,
@@ -70,8 +73,10 @@ function App() {
       <Notification config={notificationConfig} />
       <CurrentUser user={user} handleLogout={handleLogout} />
       <BlogList blogs={blogs} handleLogout={handleLogout} />
-      <h1>Create new</h1>
-      <BlogCreator handleCreate={handleCreate} />
+      <Togglable btnLabel="Create new blog" ref={blogCreatorRef}>
+        <h1>Create new</h1>
+        <BlogCreator handleCreate={handleCreate} />
+      </Togglable>
     </>
 
   const showLoginForm = () => <>
