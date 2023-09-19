@@ -1,6 +1,6 @@
 import Blog from "./Blog"
 
-const BlogList = ({ blogs }) => {
+const BlogList = ({ blogs, toggledBlogId }) => {
     return (
         <>
             <div>

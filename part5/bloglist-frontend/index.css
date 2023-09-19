@@ -16,3 +16,7 @@
     color: red;
 }
 
+.blogEntry {
+    border: 1px solid black;
+    margin-bottom: 5px;
+}
