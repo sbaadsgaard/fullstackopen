@@ -60,9 +60,20 @@ function App() {
     }
     try {
       const newBlog = await blogService.create(blog)
-      newBlog.user = user   // manually set user who created. Object returned from backend has the user ID as value
       setBlogs(blogs.concat(newBlog))
       showNotication(`Blog titled  \'${newBlog.title}\' by ${newBlog.author} has been created`, 'info')
+    } catch (exception) {
+      showNotication(exception.response.data.error, 'error')
+    }
+  }
+
+  const handleUpdate = async (updatedBlogObj) => {
+    try {
+      const updated = await blogService.update(updatedBlogObj.id, updatedBlogObj)
+      const index = blogs.findIndex(blog => blog.id === updated.id)
+      const updatedBlogs = [...blogs]
+      updatedBlogs[index] = updated
+      setBlogs(updatedBlogs)
     } catch (exception) {
       showNotication(exception.response.data.error, 'error')
     }
@@ -73,7 +84,7 @@ function App() {
       <h1>Blogs</h1>
       <Notification config={notificationConfig} />
       <CurrentUser user={user} handleLogout={handleLogout} />
-      <BlogList blogs={blogs} handleLogout={handleLogout} />
+      <BlogList blogs={blogs} handleUpdate={handleUpdate} />
       <Togglable btnLabel="Create new blog" ref={blogCreatorRef}>
         <h1>Create new</h1>
         <BlogCreator handleCreate={handleCreate} />
