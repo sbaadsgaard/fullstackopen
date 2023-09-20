@@ -4,7 +4,7 @@ import loginService from './services/loginService'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import CurrentUser from './components/CurrentUser'
-import BlogCreator from './components/BlogCreator'
+import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 function App() {
@@ -100,11 +100,11 @@ function App() {
                 blogs={blogs}
                 handleUpdate={handleUpdate}
                 handleRemove={handleRemove}
-                currentUsername={user.username}
+                BcurrentUsername={user.username}
             />
             <Togglable btnLabel="Create new blog" ref={blogCreatorRef}>
                 <h1>Create new</h1>
-                <BlogCreator handleCreate={handleCreate} />
+                <NewBlogForm handleCreate={handleCreate} />
             </Togglable>
         </>
 

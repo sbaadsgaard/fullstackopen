@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const BlogCreator = ({ handleCreate }) => {
+const NewBlogForm = ({ handleCreate }) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
@@ -23,11 +23,11 @@ const BlogCreator = ({ handleCreate }) => {
             </div>
             <div>
                 <label htmlFor="url">Url:</label>
-                <input type="text" value={url} name="title" onChange={(e) => setUrl(e.target.value)} />
+                <input type="text" value={url} name="url" onChange={(e) => setUrl(e.target.value)} />
             </div>
-            <button type="submit">Create</button>
+            <button type="submit" className='createButton'>Create</button>
         </form>
     )
 }
 
-export default BlogCreator
+export default NewBlogForm
