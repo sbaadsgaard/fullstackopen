@@ -38,7 +38,7 @@ const Blog = ({ blog, handleUpdate, handleRemove, currentUsername }) => {
     }
 
     const simpleView = () => {
-        return <div>{blog.title} {blog.author} <button onClick={toggleVisibility}>View</button></div>
+        return <div>{blog.title} {blog.author}<button onClick={toggleVisibility}>View</button></div>
     }
     //64e0ebeb132d8ce4bc4f2003
     return (
