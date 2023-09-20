@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios'
 
-const baseURL = "/api/blogs"
-let token = ""
+const baseURL = '/api/blogs'
+let token = ''
 
 const config = () => ({
     headers: {

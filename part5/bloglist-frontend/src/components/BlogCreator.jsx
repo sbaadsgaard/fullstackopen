@@ -1,15 +1,15 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const BlogCreator = ({ handleCreate }) => {
-    const [title, setTitle] = useState("")
-    const [author, setAuthor] = useState("")
-    const [url, setUrl] = useState("")
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
     const handleSubmit = e => {
         e.preventDefault()
         handleCreate({ title, author, url })
-        setTitle("")
-        setAuthor("")
-        setUrl("")
+        setTitle('')
+        setAuthor('')
+        setUrl('')
     }
     return (
         <form onSubmit={handleSubmit}>

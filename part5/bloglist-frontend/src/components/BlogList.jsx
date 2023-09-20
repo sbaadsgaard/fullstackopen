@@ -1,6 +1,7 @@
-import Blog from "./Blog"
+import Blog from './Blog'
+import PropTypes from 'prop-types'
 
-const BlogList = ({ blogs, handleUpdate, handleRemove, currentUsername}) => {
+const BlogList = ({ blogs, handleUpdate, handleRemove, currentUsername }) => {
     return (
         <>
             <div>
@@ -13,11 +14,18 @@ const BlogList = ({ blogs, handleUpdate, handleRemove, currentUsername}) => {
                             handleRemove={handleRemove}
                             currentUsername={currentUsername}
                         >
-                            </Blog>)
+                        </Blog>)
                 }
             </div>
         </>
     )
+}
+
+BlogList.propTypes = {
+    blogs: PropTypes.array.isRequired,
+    handleUpdate: PropTypes.func.isRequired,
+    handleRemove: PropTypes.func.isRequired,
+    currentUsername: PropTypes.string.isRequired
 }
 
 export default BlogList

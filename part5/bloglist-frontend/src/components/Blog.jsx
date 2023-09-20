@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const Blog = ({ blog, handleUpdate, handleRemove, currentUsername }) => {
     const [showDetails, setShowDetails] = useState(false)
@@ -50,4 +50,6 @@ const Blog = ({ blog, handleUpdate, handleRemove, currentUsername }) => {
         </div>
     )
 }
+
+
 export default Blog
