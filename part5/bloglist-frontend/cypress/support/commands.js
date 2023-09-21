@@ -24,14 +24,22 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('newUser', (newUser) => {
-	cy.request('POST', 'http://localhost:3003/api/users/', newUser)
+	cy.request('POST', `${Cypress.env('BACKEND')}/users`, newUser)
 })
 
-Cypress.Commands.add('login', (username, password) => {
+Cypress.Commands.add('manualLogin', (username, password) => {
 	cy.get('#username')
 		.type(username)
 	cy.get('#password')
 		.type(password)
 	cy.get('#loginBtn')
 		.click()
+})
+
+Cypress.Commands.add('login', (credentials) => {
+	cy.request('POST', `${Cypress.env('BACKEND')}/login`, credentials)
+})
+
+Cypress.Commands.add('newBlog', (blogInfo) => {
+	cy.request('POST', `${Cypress.env('BACKEND')}/blogs`, blogInfo)
 })

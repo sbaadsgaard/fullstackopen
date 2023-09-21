@@ -118,7 +118,7 @@ function App() {
 		setNotificationConfig({ message, className: `notification ${className}` })
 		setTimeout(() => {
 			setNotificationConfig(null)
-		}, 30000)
+		}, 3000)
 	}
 
 	return (
