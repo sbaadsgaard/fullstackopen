@@ -36,10 +36,27 @@ Cypress.Commands.add('manualLogin', (username, password) => {
 		.click()
 })
 
-Cypress.Commands.add('login', (credentials) => {
-	cy.request('POST', `${Cypress.env('BACKEND')}/login`, credentials)
+
+Cypress.Commands.add('login', (username, password) => {
+	cy.request('POST', `${Cypress.env('BACKEND')}/login`, { username, password })
+		.then(response => {
+			localStorage.setItem('activeUser', JSON.stringify(response.body))
+			cy.visit('http://localhost:5173')
+		})
 })
 
-Cypress.Commands.add('newBlog', (blogInfo) => {
-	cy.request('POST', `${Cypress.env('BACKEND')}/blogs`, blogInfo)
+Cypress.Commands.add('createBlog', (author, title, url) => {
+	const userJSON = window.localStorage.getItem('activeUser')
+	const user = JSON.parse(userJSON)
+	const blog = { author, title, url }
+	console.log(user)
+	cy.request({
+		url: `${Cypress.env('BACKEND')}/blogs`,
+		method: 'POST',
+		body: blog,
+		headers: {
+			'Authorization': `Bearer ${user.token}`
+		}
+	})
+	cy.visit('http://localhost:5173')
 })

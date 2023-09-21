@@ -39,7 +39,7 @@ describe('Blog app', function () {
 
 	describe('After logged in', function () {
 		beforeEach(function () {
-			cy.manualLogin('root', 'root')
+			cy.login('root', 'root')
 		})
 
 		it('is possible to create a new blog when logged in. new blog should appear in list of all blogs', function () {
@@ -54,6 +54,15 @@ describe('Blog app', function () {
 			cy.get('.createButton')
 				.click()
 			cy.contains('The bible God')
+		})
+
+		it('is possible  to like a post increasing the likes by 1', function () {
+			cy.createBlog('Allah', 'Quran', 'mekkah.org')
+			cy.get('.viewButton')
+				.click()
+			cy.get('.likeButton')
+				.click()
+			cy.contains('likes: 1')
 		})
 	})
 
