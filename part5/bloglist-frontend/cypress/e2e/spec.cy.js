@@ -91,6 +91,38 @@ describe('Blog app', function () {
 			cy.get('.removeButton')
 				.should('not.exist')
 		})
+
+		it('blogs should be arranged according to likes. highest to lowest', function () {
+			cy.createBlog('Least Popular author', 'least popular title', '404.org')
+			cy.createBlog('Most Popular author', 'most popular title', '404.org')
+			cy.createBlog('Medium Popular author', 'medium popular title', '404.org')
+
+			cy.contains('least popular title').
+				contains('View').click()
+			cy.contains('Like').click()
+			cy.contains('Hide').click()
+
+			cy.contains('most popular title').
+				contains('View').click()
+			cy.contains('Like').click()
+			cy.wait(500)
+			cy.contains('Like').click()
+			cy.wait(500)
+			cy.contains('Like').click()
+			cy.contains('Hide').click()
+
+
+			cy.contains('medium popular title').
+				contains('View').click()
+			cy.contains('Like').click()
+			cy.wait(500)
+			cy.contains('Like').click()
+			cy.visit('http://localhost:5173')
+
+			cy.get('.blogEntry').eq(0).should('contain', 'most popular title')
+			cy.get('.blogEntry').eq(1).should('contain', 'medium popular title')
+			cy.get('.blogEntry').eq(2).should('contain', 'least popular title')
+		})
 	})
 
 })
