@@ -72,6 +72,25 @@ describe('Blog app', function () {
 				.click()
 			cy.contains('Quran Allah').should('not.exist')
 		})
+
+		it('is only the creator of a blog that can see the like remove button', function () {
+			//first check that it exists for root
+			cy.get('.viewButton')
+				.click()
+			cy.get('.removeButton')
+
+			//new user should not see it
+			cy.newUser({
+				name: 'Mr other',
+				username: 'other',
+				password: 'password'
+			})
+			cy.login('other', 'password')
+			cy.get('.viewButton')
+				.click()
+			cy.get('.removeButton')
+				.should('not.exist')
+		})
 	})
 
 })
