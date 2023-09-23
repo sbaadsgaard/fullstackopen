@@ -22,7 +22,10 @@ const AnecdoteList = () => {
         e.preventDefault()
         dispatch(castVote(id))
     }
-    const anecdotes = useSelector(state => state.toSorted((first, second) => first.votes < second.votes))
+    const anecdotes = useSelector(({ anecdotes, filter }) => {
+        const filteredAnecdotes = anecdotes.filter(anecdote => anecdote.content.includes(filter))
+        return filteredAnecdotes.toSorted((first, second) => first.votes < second.votes)
+    })
 
     return <>
         {
