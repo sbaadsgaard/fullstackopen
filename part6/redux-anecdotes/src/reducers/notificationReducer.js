@@ -1,25 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     message: '',
-    display: 'none'
+    display: 'none',
 }
 const notificationSlice = createSlice({
     name: 'notification',
     initialState,
     reducers: {
-        setNotification(state, action) {
-            if (state.timeoutId) {
-                clearTimeout(state.timeoutId)
-            }
+        set(state, action) {
             state.message = action.payload
             state.display = ''
         },
-        clearNotification(state) {
+        clear(state) {
             state.message = ''
             state.display = 'none'
         }
     }
 })
 
-export const { setNotification, clearNotification } = notificationSlice.actions
+export const { set, clear } = notificationSlice.actions
+export const setNotification = (message, durationSeconds) => {
+    return (dispatch, getState) => {
+        //shoddy fix for stacking timeouts when voting several times in quick succession. could perhaps store the timeoutid and reset it
+        if (getState().notification.display === 'none') {
+            dispatch(set(message))
+
+            setTimeout(() => {
+                dispatch(clear())
+            }, durationSeconds * 1000)
+        }
+    }
+}
+
 export default notificationSlice.reducer
