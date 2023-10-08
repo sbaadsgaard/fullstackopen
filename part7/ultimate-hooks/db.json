@@ -1,0 +1,36 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "Buy milk and cigarettes"
+    },
+    {
+      "content": "Make goat milk",
+      "id": 2
+    },
+    {
+      "content": "rr",
+      "id": 3
+    },
+    {
+      "content": "rrr",
+      "id": 4
+    },
+    {
+      "content": "kek zozzle",
+      "id": 5
+    }
+  ],
+  "persons": [
+    {
+      "id": 1,
+      "name": "Jens hansen",
+      "number": "12345678"
+    },
+    {
+      "name": "God Almighty",
+      "number": "2456",
+      "id": 2
+    }
+  ]
+}
