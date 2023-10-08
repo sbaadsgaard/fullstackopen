@@ -6,6 +6,7 @@ import {
   useMatch,
   useNavigate
 } from 'react-router-dom'
+import { useField } from './hooks'
 const Menu = () => {
   const padding = {
     paddingRight: 5
@@ -61,21 +62,27 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
   const navigate = useNavigate()
-
+  const {reset: resetAuthor, ...author} = useField('text', 'author')
+  const {reset: resetContent, ...content} = useField('text', 'content')
+  const {reset: resetInfo, ...info }= useField('text', 'info')
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     navigate('/')
+  }
+
+  const clearAllFields = (e) => {
+    e.preventDefault()
+    resetAuthor()
+    resetContent()
+    resetInfo()
   }
 
   return (
@@ -84,17 +91,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={clearAllFields}>reset</button>
       </form>
     </div>
   )
@@ -131,6 +139,7 @@ const App = () => {
     }, 2000)
   }
   const addNew = (anecdote) => {
+    console.log(anecdote);
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
     showNotification(`A new anecdote '${anecdote.content}' has been added!`)
