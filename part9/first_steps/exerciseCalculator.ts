@@ -14,7 +14,7 @@ const ratingDescriptions = (rating: number): string => {
         case 1: return 'You must do better'
         case 2: return 'Not too bad but could be better'
         case 3: return 'Great job!'
-        //default: throw new Error('Invalid rating')
+        default: throw new Error('Invalid rating')
     }
 }
 const calculateExercises = (exerciseData: ExerciseData): Result => {
